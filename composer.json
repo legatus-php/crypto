@@ -1,0 +1,44 @@
+{
+    "name": "legatus/crypto",
+    "description": "Simple and secure cryptographic implementations for common tasks",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matias Navarro Carter",
+            "email": "contact@mnavarro.dev"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Legatus\\Support\\Crypto\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Legatus\\Support\\Crypto\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "ext-openssl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "vimeo/psalm": "^3.7",
+        "ext-json": "*"
+    },
+    "scripts": {
+        "lint": "php-cs-fixer fix --ansi",
+        "ci:style": "php-cs-fixer fix --dry-run -vvv --ansi",
+        "ci:test": "phpunit --testdox --coverage-text",
+        "ci:types": "psalm",
+        "ci": [
+            "@ci:types",
+            "@ci:test",
+            "@ci:style"
+        ]
+    }
+}
