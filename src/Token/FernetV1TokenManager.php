@@ -70,7 +70,7 @@ final class FernetV1TokenManager implements TokenManager
         $binTime = $this->packTime($this->clock->now());
         $iv = $this->randomBytes->generate(16);
         $paddedMessage = BlockPadding::pad($payload);
-        $cipher = $this->key->encrypt($iv.$paddedMessage);
+        $cipher = $this->key->encrypt($paddedMessage, $iv);
         $base = self::VERSION.$binTime.$iv.$cipher;
         $hmac = $this->key->sign($base);
 
@@ -125,7 +125,7 @@ final class FernetV1TokenManager implements TokenManager
         $iv = substr($base, 9, 16);
         $cipher = substr($base, 25);
         try {
-            $message = $this->key->decrypt($iv.$cipher);
+            $message = $this->key->decrypt($cipher, $iv);
         } catch (UnexpectedValueException $e) {
             throw TokenDecodingException::invalidPayloadSize();
         }

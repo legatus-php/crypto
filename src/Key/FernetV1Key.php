@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Legatus\Support\Crypto\Key;
 
-use InvalidArgumentException;
 use Legatus\Support\Crypto\Encoding\EncodingException;
 use Legatus\Support\Crypto\Encoding\UrlSafeBase64;
 use Legatus\Support\Crypto\Random\PhpRandomBytes;
@@ -95,16 +94,17 @@ final class FernetV1Key implements Key
 
     /**
      * @param string $payload
+     * @param string $iv
      *
      * @return string
      */
-    public function encrypt(string $payload): string
+    public function encrypt(string $payload, string $iv = ''): string
     {
-        // The first 16 bits is the IV
-        $iv = substr($payload, 0, 16);
-        $message = substr($payload, 16);
+        if (strlen($iv) !== 16) {
+            throw new UnexpectedValueException('IV must be present and of 16 bytes');
+        }
 
-        $cipher = openssl_encrypt($message, self::ENCRYPT_METHOD, $this->encryptionKey, self::ENCRYPT_FLAGS, $iv);
+        $cipher = openssl_encrypt($payload, self::ENCRYPT_METHOD, $this->encryptionKey, self::ENCRYPT_FLAGS, $iv);
         if ($cipher === false) {
             throw new UnexpectedValueException('Message length must be a multiple of 16 bytes');
         }
@@ -114,18 +114,19 @@ final class FernetV1Key implements Key
 
     /**
      * @param string $payload
+     * @param string $iv
      *
      * @return string
      */
-    public function decrypt(string $payload): string
+    public function decrypt(string $payload, string $iv = ''): string
     {
-        // The first 16 bits is the IV
-        $iv = substr($payload, 0, 16);
-        $message = substr($payload, 16);
+        if (strlen($iv) !== 16) {
+            throw new UnexpectedValueException('IV must be present and of 16 bytes');
+        }
 
-        $decrypted = openssl_decrypt($message, self::ENCRYPT_METHOD, $this->encryptionKey, self::ENCRYPT_FLAGS, $iv);
+        $decrypted = openssl_decrypt($payload, self::ENCRYPT_METHOD, $this->encryptionKey, self::ENCRYPT_FLAGS, $iv);
         if ($decrypted === false) {
-            throw new InvalidArgumentException('Invalid decryption');
+            throw new UnexpectedValueException('Invalid decryption');
         }
 
         return $decrypted;

@@ -35,15 +35,17 @@ interface Key
 
     /**
      * @param string $payload
+     * @param string $iv
      *
      * @return string
      */
-    public function encrypt(string $payload): string;
+    public function encrypt(string $payload, string $iv = ''): string;
 
     /**
      * @param string $payload
+     * @param string $iv
      *
      * @return string
      */
-    public function decrypt(string $payload): string;
+    public function decrypt(string $payload, string $iv = ''): string;
 }
