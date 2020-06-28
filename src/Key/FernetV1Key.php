@@ -100,10 +100,6 @@ final class FernetV1Key implements Key
      */
     public function encrypt(string $payload, string $iv = ''): string
     {
-        if (strlen($iv) !== 16) {
-            throw new UnexpectedValueException('IV must be present and of 16 bytes');
-        }
-
         $cipher = openssl_encrypt($payload, self::ENCRYPT_METHOD, $this->encryptionKey, self::ENCRYPT_FLAGS, $iv);
         if ($cipher === false) {
             throw new UnexpectedValueException('Message length must be a multiple of 16 bytes');
@@ -120,10 +116,6 @@ final class FernetV1Key implements Key
      */
     public function decrypt(string $payload, string $iv = ''): string
     {
-        if (strlen($iv) !== 16) {
-            throw new UnexpectedValueException('IV must be present and of 16 bytes');
-        }
-
         $decrypted = openssl_decrypt($payload, self::ENCRYPT_METHOD, $this->encryptionKey, self::ENCRYPT_FLAGS, $iv);
         if ($decrypted === false) {
             throw new UnexpectedValueException('Invalid decryption');
