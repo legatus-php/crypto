@@ -9,13 +9,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Legatus\Support\Crypto\Encoding;
+namespace Legatus\Support\Crypto\Cipher;
 
 use Exception;
 
 /**
- * Class EncodingException.
+ * Class ExpiredCipher.
  */
-class EncodingException extends Exception
+class ExpiredCipher extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct('Expired cipher');
+    }
 }

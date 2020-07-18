@@ -9,30 +9,28 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Legatus\Support\Crypto\Encoding;
+namespace Legatus\Support\Crypto\Cipher;
 
 /**
- * Class Hex.
+ * Interface Cipher.
  */
-final class Hex
+interface Cipher
 {
     /**
-     * @param string $bin
+     * @param string $plainText
      *
      * @return string
      */
-    public static function encode(string $bin): string
-    {
-        return bin2hex($bin);
-    }
+    public function encrypt(string $plainText): string;
 
     /**
-     * @param string $hex
+     * @param string   $cipher
+     * @param int|null $ttl
+     *
+     * @throws InvalidCipher
+     * @throws ExpiredCipher
      *
      * @return string
      */
-    public static function decode(string $hex): string
-    {
-        return hex2bin($hex);
-    }
+    public function decrypt(string $cipher, int $ttl = null): string;
 }
