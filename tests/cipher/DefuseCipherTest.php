@@ -9,13 +9,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Legatus\Support\Crypto\Tests\Cipher;
+namespace Legatus\Support;
 
 use Defuse\Crypto\Key;
 use Lcobucci\Clock\FrozenClock;
-use Legatus\Support\Crypto\Cipher\DefuseCipher;
-use Legatus\Support\Crypto\Cipher\ExpiredCipher;
-use Legatus\Support\Crypto\Cipher\InvalidCipher;
 use PHPUnit\Framework\TestCase;
 
 /**

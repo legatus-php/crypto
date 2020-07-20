@@ -9,7 +9,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Legatus\Support\Crypto\Cipher;
+namespace Legatus\Support;
 
 use Exception;
 use Throwable;

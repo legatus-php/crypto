@@ -12,12 +12,12 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Legatus\\Support\\Crypto\\": "src"
+            "Legatus\\Support\\": ["src/cipher"]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Legatus\\Support\\Crypto\\Tests\\": "tests"
+            "Legatus\\Support\\": ["tests/cipher"]
         }
     },
     "require": {
