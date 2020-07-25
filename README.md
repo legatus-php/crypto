@@ -7,7 +7,7 @@ Simple and secure cryptographic implementations for common tasks
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Flegatus-php%2Fcrypto%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/legatus-php/crypto/master)
 
 ## Installation
-You can install the Event Dispatcher component using [Composer][composer]:
+You can install the Crypto component using [Composer][composer]:
 
 ```bash
 composer require legatus/crypto
