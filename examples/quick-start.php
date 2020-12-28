@@ -1,18 +1,20 @@
 <?php
 declare(strict_types=1);
 
-$key = Defuse\Crypto\Key::createNewRandomKey();
-$cipher = new Legatus\Support\DefuseCipher($key);
+use Legatus\Support\LegatusCipher;
+use Legatus\Support\SecretKey;
+
+$secret = SecretKey::generate()->getBytes();
+$cipher = new LegatusCipher($secret);
 
 $encrypted = $cipher->encrypt('message');
 
 // You can optionally pass a ttl for verification
 try {
     $message = $cipher->decrypt($encrypted, 3600);
-} catch (Defuse\Crypto\Exception\EnvironmentIsBrokenException $e) {
-    // There is no access to a CPRNG
+    echo $message; // Writes: "message"
 } catch (Legatus\Support\ExpiredCipher $e) {
-    // The message has passed the ttl
+    // The encrypted message has passed the ttl
 } catch (Legatus\Support\InvalidCipher $e) {
-    // The message is invalid
+    // The encrypted message is invalid
 }

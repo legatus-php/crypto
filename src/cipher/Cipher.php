@@ -3,8 +3,13 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Legatus project organization.
- * (c) Matías Navarro-Carter <contact@mnavarro.dev>
+ * @project Legatus Crypto
+ * @link https://github.com/legatus-php/crypto
+ * @package legatus/crypto
+ * @author Matias Navarro-Carter mnavarrocarter@gmail.com
+ * @license MIT
+ * @copyright 2021 Matias Navarro-Carter
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -24,13 +29,13 @@ interface Cipher
     public function encrypt(string $plainText): string;
 
     /**
-     * @param string   $cipher
+     * @param string   $encrypted
      * @param int|null $ttl
      *
-     * @throws InvalidCipher
-     * @throws ExpiredCipher
-     *
      * @return string
+     *
+     *@throws ExpiredCipher
+     * @throws InvalidCipher
      */
-    public function decrypt(string $cipher, int $ttl = null): string;
+    public function decrypt(string $encrypted, int $ttl = null): string;
 }

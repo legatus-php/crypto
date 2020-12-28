@@ -17,21 +17,24 @@ declare(strict_types=1);
 namespace Legatus\Support;
 
 use Exception;
-use Throwable;
+use RuntimeException;
 
 /**
- * Class InvalidCipher.
+ * Class PhpRandom.
  */
-class InvalidCipher extends Exception
+class PhpRandom implements Random
 {
     /**
-     * InvalidCipher constructor.
+     * @param int $bytes
      *
-     * @param string         $message
-     * @param Throwable|null $previous
+     * @return string
      */
-    public function __construct(string $message, Throwable $previous = null)
+    public function read(int $bytes): string
     {
-        parent::__construct($message, 0, $previous);
+        try {
+            return random_bytes($bytes);
+        } catch (Exception $e) {
+            throw new RuntimeException('Not enough entropy');
+        }
     }
 }

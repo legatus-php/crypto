@@ -16,22 +16,15 @@ declare(strict_types=1);
 
 namespace Legatus\Support;
 
-use Exception;
-use Throwable;
-
 /**
- * Class InvalidCipher.
+ * Interface Random.
  */
-class InvalidCipher extends Exception
+interface Random
 {
     /**
-     * InvalidCipher constructor.
+     * @param int $bytes
      *
-     * @param string         $message
-     * @param Throwable|null $previous
+     * @return string
      */
-    public function __construct(string $message, Throwable $previous = null)
-    {
-        parent::__construct($message, 0, $previous);
-    }
+    public function read(int $bytes): string;
 }
