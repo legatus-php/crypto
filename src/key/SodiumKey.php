@@ -62,6 +62,9 @@ class SodiumKey implements SecretKey
 
         while (!feof($handle)) {
             $line = fgets($handle);
+            if (!is_string($line)) {
+                continue;
+            }
             $line = rtrim($line, PHP_EOL);
             if ($line === '') {
                 continue;
