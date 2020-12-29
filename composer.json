@@ -29,7 +29,8 @@
     "require-dev": {
         "phpunit/phpunit": "^9.0",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "vimeo/psalm": "^3.7"
+        "vimeo/psalm": "^3.7",
+        "adlawson/vfs": "^0.12.1"
     },
     "scripts": {
         "lint": "php-cs-fixer fix --ansi",

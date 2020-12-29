@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Legatus\Support;
 
+use RuntimeException;
 use SodiumException;
 
 /**
@@ -27,16 +28,21 @@ class SecretKey
     private string $bytes;
 
     /**
-     * @param string $filename
+     * @param string      $filename
+     * @param Random|null $random
      *
      * @return SecretKey
      *
      * @throws SodiumException
      */
-    public static function persistent(string $filename): SecretKey
+    public static function persistent(string $filename, Random $random = null): SecretKey
     {
         if (!is_file($filename)) {
-            $key = static::generate();
+            $dir = dirname($filename);
+            if (!is_dir($dir) && !mkdir($dir, 0750, true) && !is_dir($dir)) {
+                throw new RuntimeException("Could not create directory \"$dir\"");
+            }
+            $key = static::generate($random);
             file_put_contents($filename, $key->toString());
         }
 
@@ -100,7 +106,7 @@ class SecretKey
     private function guard(): void
     {
         if (strlen($this->bytes) !== SODIUM_CRYPTO_SECRETBOX_KEYBYTES) {
-            throw new \RuntimeException(sprintf('The key length must be %s bytes in size', SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
+            throw new RuntimeException(sprintf('The key length must be %s bytes in size', SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
         }
     }
 
