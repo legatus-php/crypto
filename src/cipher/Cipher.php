@@ -17,7 +17,8 @@ declare(strict_types=1);
 namespace Legatus\Support;
 
 /**
- * Interface Cipher.
+ * A Cipher provides the contract to generate a secure, time based, authenticated
+ * and encoded ciphertexts.
  */
 interface Cipher
 {
@@ -34,8 +35,7 @@ interface Cipher
      *
      * @return string
      *
-     *@throws ExpiredCipher
-     * @throws InvalidCipher
+     * @throws ExpiredCipher|InvalidCipher
      */
     public function decrypt(string $encrypted, int $ttl = null): string;
 }

@@ -19,12 +19,12 @@ namespace Legatus\Support;
 use PHPUnit\Framework\TestCase;
 use Vfs\FileSystem;
 
-class SecretKeyTest extends TestCase
+class SodiumKeyTest extends TestCase
 {
     public function testItGeneratesASecretKey(): void
     {
         $random = FixedRandom::ofLength(32);
-        $key = SecretKey::generate($random)->toString();
+        $key = SodiumKey::generate($random)->toString();
         self::assertSame('AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8', $key);
     }
 
@@ -34,9 +34,9 @@ class SecretKeyTest extends TestCase
         $fs->mount();
 
         $random = FixedRandom::ofLength(32);
-        $key = SecretKey::persistent('vfs://data/secret.key', $random)->toString();
-        self::assertSame('AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8', $key);
+        SodiumKey::fromFile('vfs://data/secret.key', $random);
         self::assertFileExists('vfs://data/secret.key');
+        self::assertSame("AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8\n", \file_get_contents('vfs://data/secret.key'));
 
         $fs->unmount();
     }

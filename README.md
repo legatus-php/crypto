@@ -19,9 +19,9 @@ composer require legatus/crypto
 <?php
 
 use Legatus\Support\LegatusCipher;
-use Legatus\Support\SecretKey;
+use Legatus\Support\SodiumKey;
 
-$secret = SecretKey::generate()->getBytes();
+$secret = SodiumKey::generate()->getBytes();
 $cipher = new LegatusCipher($secret);
 
 $encrypted = $cipher->encrypt('message');

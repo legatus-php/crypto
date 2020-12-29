@@ -25,7 +25,7 @@ class CipherStatefulTokenTest extends TestCase
 {
     public function testItEncodesToken(): void
     {
-        $key = SecretKey::generate()->getBytes();
+        $key = SodiumKey::generate();
 
         $cipher = new LegatusCipher($key);
         $token = new CipherStatefulToken($cipher);

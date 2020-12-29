@@ -16,115 +16,58 @@ declare(strict_types=1);
 
 namespace Legatus\Support;
 
-use RuntimeException;
-use SodiumException;
+use InvalidArgumentException;
 
 /**
- * The SecretKey class provides helpers to create secret keys needed by the
- * LegatusCipher.
+ * Interface SecretKey.
  */
-class SecretKey
+interface SecretKey
 {
-    private string $bytes;
-
     /**
-     * @param string      $filename
-     * @param Random|null $random
+     * Encrypts a message.
      *
-     * @return SecretKey
+     * Implementors SHOULD use authenticated encryption under the hood.
      *
-     * @throws SodiumException
+     * The output of the encryption process MUST NOT be encoded in any way.
+     *
+     * @param string $message
+     * @param string $nonce
+     *
+     * @return string The raw bytes
      */
-    public static function persistent(string $filename, Random $random = null): SecretKey
-    {
-        if (!is_file($filename)) {
-            $dir = dirname($filename);
-            if (!is_dir($dir) && !mkdir($dir, 0750, true) && !is_dir($dir)) {
-                throw new RuntimeException("Could not create directory \"$dir\"");
-            }
-            $key = static::generate($random);
-            file_put_contents($filename, $key->toString());
-        }
-
-        return static::fromUrlEncodedBase64String(file_get_contents($filename));
-    }
+    public function encrypt(string $message, string $nonce): string;
 
     /**
-     * @param string $base64
+     * Decrypts a message.
      *
-     * @return SecretKey
+     * Implementors MUST assume both the cipher and the nonce are unencoded raw
+     * bytes.
      *
-     * @throws SodiumException
-     */
-    public static function fromUrlEncodedBase64String(string $base64): SecretKey
-    {
-        return new self(sodium_base642bin($base64, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING));
-    }
-
-    /**
-     * @param Random|null $random
-     *
-     * @return SecretKey
-     */
-    public static function generate(Random $random = null): SecretKey
-    {
-        $random = $random ?? new PhpRandom();
-
-        return new self($random->read(SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
-    }
-
-    /**
-     * LegatusKey constructor.
-     *
-     * @param string $bytes
-     */
-    public function __construct(string $bytes)
-    {
-        $this->bytes = $bytes;
-        $this->guard();
-    }
-
-    /**
      * @param string $cipher
      * @param string $nonce
      *
      * @return string
      *
-     * @throws InvalidCipher
-     * @throws SodiumException
+     * @throws InvalidArgumentException when the cipher could not be decrypted or
+     *                                  was invalid
      */
-    public function decrypt(string $cipher, string $nonce): string
-    {
-        $result = sodium_crypto_secretbox_open($cipher, $nonce, $this->bytes);
-        if ($result === false) {
-            throw new InvalidCipher('Invalid cipher');
-        }
-
-        return $result;
-    }
-
-    private function guard(): void
-    {
-        if (strlen($this->bytes) !== SODIUM_CRYPTO_SECRETBOX_KEYBYTES) {
-            throw new RuntimeException(sprintf('The key length must be %s bytes in size', SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
-        }
-    }
+    public function decrypt(string $cipher, string $nonce): string;
 
     /**
-     * @return string
-     */
-    public function getBytes(): string
-    {
-        return $this->bytes;
-    }
-
-    /**
-     * @return string
+     * @param string $message
      *
-     * @throws SodiumException
+     * @return string The authenticated message
      */
-    public function toString(): string
-    {
-        return sodium_bin2base64($this->bytes, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
-    }
+    public function authenticate(string $message): string;
+
+    /**
+     * Verifies an authenticated message.
+     *
+     * @param string $authenticatedMessage
+     *
+     * @return string The message without authentication
+     *
+     * @throws InvalidArgumentException when the message is not valid
+     */
+    public function verify(string $authenticatedMessage): string;
 }

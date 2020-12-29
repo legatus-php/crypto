@@ -16,12 +16,10 @@ declare(strict_types=1);
 
 namespace Legatus\Support;
 
-use Exception;
-
 /**
  * Class ExpiredCipher.
  */
-class ExpiredCipher extends Exception
+class ExpiredCipher extends InvalidCipher
 {
     public function __construct()
     {

@@ -13,7 +13,8 @@
     "autoload": {
         "psr-4": {
             "Legatus\\Support\\": ["src/cipher", "src/key", "src/rand", "src/token"]
-        }
+        },
+        "files": ["src/functions.php"]
     },
     "autoload-dev": {
         "psr-4": {
